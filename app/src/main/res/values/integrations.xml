@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="api_end_point">https://api.themoviedb.org/</string>
+    <string name="img_end_point">https://image.tmdb.org/t/p/original/</string>
+    <string name="api_key">8ac3bea5e0e63f1b4c5f608d2f31b372</string>
+</resources>
