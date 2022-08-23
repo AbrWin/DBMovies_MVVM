@@ -20,10 +20,12 @@ fun SessionModel.toDomain() = Session(success, expires_at, request_token)
 data class Login(
     val success: Boolean,
     val expires_at: String,
-    val request_token: String
+    val request_token: String,
+    val status_message: String,
+    val status_code: Int,
 )
 
-fun LoginModel.toDomain() = Login(success, expires_at, request_token)
+fun LoginModel.toDomain() = Login(success, expires_at, request_token, status_message, status_code)
 
 data class SessionId(
     val success: Boolean,

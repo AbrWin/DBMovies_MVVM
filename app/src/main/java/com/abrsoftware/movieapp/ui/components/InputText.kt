@@ -22,9 +22,9 @@ import com.abrsoftware.movieapp.ui.theme.PersonalStyle
 
 
 @Composable
-fun InputText(placeHolder: String, onGetText: (text: String) -> Unit, mockVal: String) {
+fun InputText(placeHolder: String, onGetText: (text: String) -> Unit) {
     var textState by remember {
-        mutableStateOf(mockVal)
+        mutableStateOf("")
     }
     val typeInput = if (!placeHolder.contains("User"))
         PasswordVisualTransformation()
@@ -45,7 +45,6 @@ fun InputText(placeHolder: String, onGetText: (text: String) -> Unit, mockVal: S
                     shape = RoundedCornerShape(8.dp)
                 ),
             visualTransformation = typeInput,
-            enabled = false,
             value = textState,
             singleLine = true,
             maxLines = 1,

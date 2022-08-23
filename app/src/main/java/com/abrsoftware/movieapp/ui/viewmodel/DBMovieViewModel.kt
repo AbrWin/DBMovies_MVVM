@@ -1,5 +1,6 @@
 package com.abrsoftware.movieapp.ui.viewmodel
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,6 +23,7 @@ class DBMovieViewModel @Inject constructor(
     val account = MutableLiveData<Account>()
     var isLoading: Boolean by mutableStateOf(false)
     var movieListResponse:List<Movie> by mutableStateOf(listOf())
+
     fun initLogin(username: String, password: String) {
         viewModelScope.launch {
             isLoading = true
@@ -36,6 +38,9 @@ class DBMovieViewModel @Inject constructor(
                         val resultAccount = dBMovieUserCase.getAccount(resultSessionId.session_id)
                         account.postValue(resultAccount)
                     }
+                }else{
+                    isLoading = false
+                    Log.d("MSJ", resultLogin.status_message)
                 }
             }
         }

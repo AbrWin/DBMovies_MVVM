@@ -82,13 +82,13 @@ fun LoginScreen(
                     .padding(30.dp),
                 verticalArrangement = Arrangement.Top
             ) {
-                 InputText("User", {
+                 InputText("User") {
                      userVal = it
-                 }, "abrwin21")
+                 }
 
-                InputText("Password",{
+                InputText("Password") {
                     passVal = it
-                },"dante2143")
+                }
 
                 Spacer(modifier = Modifier.height(40.dp))
                 Button(
@@ -100,7 +100,7 @@ fun LoginScreen(
                         contentColor = Color.Black
                     ),
                     onClick = {
-                        viewModel.initLogin(username = "abrwin21", password = "dante2143")
+                        viewModel.initLogin(username = userVal, password = passVal)
                     }) {
                     Text(text = btnText)
                 }
