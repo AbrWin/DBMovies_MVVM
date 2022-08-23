@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Snackbar
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -35,6 +36,7 @@ import com.abrsoftware.movieapp.ui.theme.PersonalStyle
 import com.abrsoftware.movieapp.R
 import com.abrsoftware.movieapp.domain.dbmovie.Account
 import com.abrsoftware.movieapp.ui.components.DialogLoading
+import com.abrsoftware.movieapp.ui.components.SnackbarScreen
 import com.abrsoftware.movieapp.ui.components.Thumb
 import com.abrsoftware.movieapp.ui.viewmodel.DBMovieViewModel
 
@@ -115,6 +117,12 @@ fun LoginScreen(
                 )
         ) {
             LoginText()
+        }
+
+        if (viewModel.errorMsj != ""){
+            SnackbarScreen({
+                viewModel.errorMsj = ""
+            },message = viewModel.errorMsj )
         }
 
         if(viewModel.isLoading){

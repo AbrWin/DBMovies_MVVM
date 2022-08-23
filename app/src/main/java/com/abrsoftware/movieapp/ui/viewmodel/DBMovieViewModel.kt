@@ -23,6 +23,7 @@ class DBMovieViewModel @Inject constructor(
     val account = MutableLiveData<Account>()
     var isLoading: Boolean by mutableStateOf(false)
     var movieListResponse:List<Movie> by mutableStateOf(listOf())
+    var errorMsj: String by mutableStateOf("")
 
     fun initLogin(username: String, password: String) {
         viewModelScope.launch {
@@ -40,6 +41,7 @@ class DBMovieViewModel @Inject constructor(
                     }
                 }else{
                     isLoading = false
+                    errorMsj = resultLogin.status_message
                     Log.d("MSJ", resultLogin.status_message)
                 }
             }

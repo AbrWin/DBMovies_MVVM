@@ -33,12 +33,11 @@ class DBMovieUserCaseTest{
 
         //when
         getDBMovieUseCase.getSession()
+
         //Then
         coVerify(exactly = 1) {
-            getSession()
+            dbMovieRepository.getSession()
         }
     }
 }
-fun getSession():Session{
-    return Session(true, "today", "12345")
-}
+
