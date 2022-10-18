@@ -39,7 +39,7 @@ fun ProfileScreen(
 
         Column {
             ProfileComponent(account)
-            MediaList(movies = viewModel.movieListResponse)
+            MediaList(movies = viewModel.movieListResponse.collectAsState().value)
             viewModel.getListMovies()
         }
     }

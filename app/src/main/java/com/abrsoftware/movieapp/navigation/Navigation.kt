@@ -33,7 +33,7 @@ fun Navigation() {
             })
         }
         composable(NavItem.ProfileNavItem) {
-            var account = navController.previousBackStackEntry?.savedStateHandle?.get<Account>("account")
+            val account = navController.previousBackStackEntry?.savedStateHandle?.get<Account>("account")
             if (account != null) {
                 ProfileScreen(account)
             }
