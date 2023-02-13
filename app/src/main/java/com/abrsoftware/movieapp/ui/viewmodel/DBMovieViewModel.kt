@@ -3,6 +3,7 @@ package com.abrsoftware.movieapp.ui.viewmodel
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.*
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,6 +11,7 @@ import com.abrsoftware.movieapp.domain.DBMovieUserCase
 import com.abrsoftware.movieapp.domain.dbmovie.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,7 +20,9 @@ class DBMovieViewModel @Inject constructor(
     private var dBMovieUserCase: DBMovieUserCase
 ) : ViewModel() {
 
-    val account = MutableLiveData<Account>()
+    val _account = MutableLiveData<Account>()
+    val account : LiveData<Account> = _account
+
     var isLoading: Boolean by mutableStateOf(false)
 
     var movieListResponse = MutableStateFlow(emptyList<Movie>())
@@ -35,8 +39,10 @@ class DBMovieViewModel @Inject constructor(
                     val resultSessionId = dBMovieUserCase.getSessionId(resultLogin.request_token)
                     if (resultSessionId.session_id.isNotEmpty()) {
                         isLoading = false
-                        val resultAccount = dBMovieUserCase.getAccount(resultSessionId.session_id)
-                        account.postValue(resultAccount)
+                        dBMovieUserCase.getAccount(resultSessionId.session_id).let {
+                            _account.value = it
+                        }
+
                     }
                 }else{
                     isLoading = false
@@ -49,8 +55,9 @@ class DBMovieViewModel @Inject constructor(
 
     fun getListMovies(){
         viewModelScope.launch {
-            val result = dBMovieUserCase.getLastest()
-            movieListResponse.value = result
+            dBMovieUserCase.getLastest().let {
+                movieListResponse.value = it
+            }
         }
     }
 }
