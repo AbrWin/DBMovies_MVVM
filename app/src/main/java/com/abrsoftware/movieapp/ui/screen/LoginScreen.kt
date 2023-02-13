@@ -1,5 +1,6 @@
 package com.abrsoftware.movieapp.ui.screen
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import androidx.activity.viewModels
@@ -25,7 +26,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.flowWithLifecycle
 
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -39,14 +42,19 @@ import com.abrsoftware.movieapp.ui.components.DialogLoading
 import com.abrsoftware.movieapp.ui.components.SnackbarScreen
 import com.abrsoftware.movieapp.ui.components.Thumb
 import com.abrsoftware.movieapp.ui.viewmodel.DBMovieViewModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun LoginScreen(
     onNavigate: (account: Account) -> Unit,
-    viewModel: DBMovieViewModel = hiltViewModel(),
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
+    viewModel: DBMovieViewModel = hiltViewModel()
 ) {
+    val account by viewModel.account.collectAsState()
+    val scope = rememberCoroutineScope()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -84,9 +92,9 @@ fun LoginScreen(
                     .padding(30.dp),
                 verticalArrangement = Arrangement.Top
             ) {
-                 InputText("User") {
-                     userVal = it
-                 }
+                InputText("User") {
+                    userVal = it
+                }
 
                 InputText("Password") {
                     passVal = it
@@ -119,19 +127,23 @@ fun LoginScreen(
             LoginText()
         }
 
-        if (viewModel.errorMsj != ""){
+        if (viewModel.errorMsj != "") {
             SnackbarScreen({
                 viewModel.errorMsj = ""
-            },message = viewModel.errorMsj )
+            }, message = viewModel.errorMsj)
         }
 
-        if(viewModel.isLoading){
+        if (viewModel.isLoading) {
             btnText = "LOADING.."
             DialogLoading()
-        }else{
+        } else {
             btnText = "Hi there!"
-            viewModel.account.observe(lifecycleOwner) { account ->
-                onNavigate(account)
+            if (account.id != 0) {
+                scope.launch {
+                    Log.d("id->", account.id.toString())
+                    onNavigate(account)
+                    scope.cancel()
+                }
             }
         }
     }

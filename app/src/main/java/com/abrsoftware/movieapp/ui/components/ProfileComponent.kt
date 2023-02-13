@@ -57,7 +57,7 @@ fun ProfileComponent(
                         .width(140.dp)
                         .clip(CircleShape),
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(LocalContext.current.getString(R.string.img_end_point) + account.avatar.tmdb.userImg)
+                        .data(LocalContext.current.getString(R.string.img_end_point) + account.avatar!!.tmdb.userImg)
                         .crossfade(100)
                         .build(),
                     contentDescription = stringResource(R.string.ctdescription),

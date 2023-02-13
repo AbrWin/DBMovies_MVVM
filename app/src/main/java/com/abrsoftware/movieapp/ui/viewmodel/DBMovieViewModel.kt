@@ -11,6 +11,7 @@ import com.abrsoftware.movieapp.domain.DBMovieUserCase
 import com.abrsoftware.movieapp.domain.dbmovie.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,12 +21,13 @@ class DBMovieViewModel @Inject constructor(
     private var dBMovieUserCase: DBMovieUserCase
 ) : ViewModel() {
 
-    val _account = MutableLiveData<Account>()
-    val account : LiveData<Account> = _account
+    val _account = MutableStateFlow(Account())
+    val account : StateFlow<Account> get()  = _account
+
+    val _movieList = MutableStateFlow(emptyList<Movie>())
+    val movieList: StateFlow<List<Movie>> get() = _movieList
 
     var isLoading: Boolean by mutableStateOf(false)
-
-    var movieListResponse = MutableStateFlow(emptyList<Movie>())
     var errorMsj: String by mutableStateOf("")
 
     fun initLogin(username: String, password: String) {
@@ -42,7 +44,6 @@ class DBMovieViewModel @Inject constructor(
                         dBMovieUserCase.getAccount(resultSessionId.session_id).let {
                             _account.value = it
                         }
-
                     }
                 }else{
                     isLoading = false
@@ -55,9 +56,9 @@ class DBMovieViewModel @Inject constructor(
 
     fun getListMovies(){
         viewModelScope.launch {
-            dBMovieUserCase.getLastest().let {
-                movieListResponse.value = it
-            }
+           dBMovieUserCase.getLastest().let {
+               _movieList.value = it
+           }
         }
     }
 }

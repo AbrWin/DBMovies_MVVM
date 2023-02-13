@@ -36,10 +36,10 @@ fun ProfileScreen(
             .fillMaxSize()
             .background(Color.Black)
     ) {
-
+        val movies by viewModel.movieList.collectAsState()
         Column {
             ProfileComponent(account)
-            MediaList(movies = viewModel.movieListResponse.collectAsState().value)
+            MediaList(movies = movies)
             viewModel.getListMovies()
         }
     }

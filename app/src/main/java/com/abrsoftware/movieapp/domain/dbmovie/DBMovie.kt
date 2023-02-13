@@ -36,12 +36,14 @@ fun SessionIdModel.toDomain() = SessionId(success, session_id)
 
 @Parcelize
 data class Account(
-    val avatar: @RawValue Avatar,
+    val avatar: @RawValue Avatar? = null,
     val id: Int,
     val country: String,
     val name: String,
     val username: String
-): Parcelable
+): Parcelable {
+    constructor() : this(null, 0,"","","")
+}
 
 
 @Parcelize
