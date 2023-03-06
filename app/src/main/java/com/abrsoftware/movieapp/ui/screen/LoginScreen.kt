@@ -114,7 +114,7 @@ fun LoginScreen(
                         contentColor = Color.Black
                     ),
                     onClick = {
-                        viewModel.initLogin(username = "abrwin21", password = "dante2143")
+                        viewModel.initLogin(username = "", password = "")
                     }) {
                     Text(text = btnText)
                 }
