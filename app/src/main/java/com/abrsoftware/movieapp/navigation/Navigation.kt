@@ -24,17 +24,17 @@ fun Navigation() {
         startDestination = NavItem.LoginNavItem.route,
     ) {
         composable(NavItem.LoginNavItem) {
-            LoginScreen(onNavigate = {
+            LoginScreen(onNavigate = { account->
                 navController.currentBackStackEntry?.savedStateHandle?.set(
                     key = "account",
-                    value = it
+                    value = account
                 )
                 navController.navigate(NavItem.ProfileNavItem.route)
             })
         }
         composable(NavItem.ProfileNavItem) {
             val account = navController.previousBackStackEntry?.savedStateHandle?.get<Account>("account")
-            if (account != null) {
+            account?.let {
                 ProfileScreen(account)
             }
         }

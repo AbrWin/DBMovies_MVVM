@@ -55,6 +55,10 @@ fun LoginScreen(
 ) {
     val account by viewModel.account.collectAsState()
     val scope = rememberCoroutineScope()
+
+    val accountId by remember {
+        mutableStateOf(Account())
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -92,13 +96,13 @@ fun LoginScreen(
                     .padding(30.dp),
                 verticalArrangement = Arrangement.Top
             ) {
-                InputText("User") {
+                InputText("User", onGetText = {
                     userVal = it
-                }
+                })
 
-                InputText("Password") {
+                InputText("Password", onGetText = {
                     passVal = it
-                }
+                })
 
                 Spacer(modifier = Modifier.height(40.dp))
                 Button(
@@ -110,7 +114,7 @@ fun LoginScreen(
                         contentColor = Color.Black
                     ),
                     onClick = {
-                        viewModel.initLogin(username = userVal, password = passVal)
+                        viewModel.initLogin(username = "abrwin21", password = "dante2143")
                     }) {
                     Text(text = btnText)
                 }

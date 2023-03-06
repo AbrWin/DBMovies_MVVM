@@ -23,9 +23,11 @@ import com.abrsoftware.movieapp.ui.theme.PersonalStyle
 
 @Composable
 fun InputText(placeHolder: String, onGetText: (text: String) -> Unit) {
+
     var textState by remember {
         mutableStateOf("")
     }
+
     val typeInput = if (!placeHolder.contains("User"))
         PasswordVisualTransformation()
     else {
