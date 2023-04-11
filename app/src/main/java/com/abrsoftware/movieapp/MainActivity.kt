@@ -1,9 +1,10 @@
 package com.abrsoftware.movieapp
 
+import android.content.Context
+import android.content.ContextWrapper
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
@@ -13,10 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.abrsoftware.movieapp.ui.theme.LoginFirebaseTheme
-import com.abrsoftware.movieapp.ui.viewmodel.DBMovieViewModel
 import com.abrsoftware.mymovies.ui.navigation.Navigation
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @OptIn(ExperimentalFoundationApi::class)
 @AndroidEntryPoint
@@ -50,4 +49,10 @@ fun DefaultPreview() {
     LoginFirebaseTheme {
         Greeting("Android")
     }
+}
+
+fun Context.findActivity(): ComponentActivity? = when (this) {
+    is ComponentActivity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> null
 }

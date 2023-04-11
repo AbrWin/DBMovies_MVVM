@@ -10,9 +10,7 @@ data class Session(
     val success: Boolean,
     val expires_at: String,
     val request_token: String
-){
-
-}
+)
 
 fun SessionModel.toDomain() = Session(success, expires_at, request_token)
 

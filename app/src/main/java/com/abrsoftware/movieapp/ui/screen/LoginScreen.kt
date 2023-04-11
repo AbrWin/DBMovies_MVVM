@@ -1,21 +1,16 @@
 package com.abrsoftware.movieapp.ui.screen
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.util.Log
-import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Snackbar
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -27,25 +22,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.flowWithLifecycle
-
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.abrsoftware.movieapp.MainActivity
 import com.abrsoftware.movieapp.ui.components.InputText
 import com.abrsoftware.movieapp.ui.theme.GreenBase
 import com.abrsoftware.movieapp.ui.theme.PersonalStyle
 import com.abrsoftware.movieapp.R
 import com.abrsoftware.movieapp.domain.dbmovie.Account
+import com.abrsoftware.movieapp.findActivity
 import com.abrsoftware.movieapp.ui.components.DialogLoading
 import com.abrsoftware.movieapp.ui.components.SnackbarScreen
-import com.abrsoftware.movieapp.ui.components.Thumb
 import com.abrsoftware.movieapp.ui.viewmodel.DBMovieViewModel
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
-
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
@@ -53,12 +42,9 @@ fun LoginScreen(
     onNavigate: (account: Account) -> Unit,
     viewModel: DBMovieViewModel = hiltViewModel()
 ) {
-    val account by viewModel.account.collectAsState()
-    val scope = rememberCoroutineScope()
+    val account by viewModel.account.collectAsStateWithLifecycle()
+    val activity = LocalContext.current.findActivity()
 
-    val accountId by remember {
-        mutableStateOf(Account())
-    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -114,7 +100,7 @@ fun LoginScreen(
                         contentColor = Color.Black
                     ),
                     onClick = {
-                        viewModel.initLogin(username = "", password = "")
+                        viewModel.initLogin(username = "abrwin21", password = "dante2143")
                     }) {
                     Text(text = btnText)
                 }
@@ -143,10 +129,10 @@ fun LoginScreen(
         } else {
             btnText = "Hi there!"
             if (account.id != 0) {
-                scope.launch {
-                    Log.d("id->", account.id.toString())
-                    onNavigate(account)
-                    scope.cancel()
+                LaunchedEffect(activity!!.lifecycle){
+                    activity.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        onNavigate(account)
+                    }
                 }
             }
         }

@@ -1,10 +1,7 @@
 package com.abrsoftware.movieapp.ui.viewmodel
 
 import android.util.Log
-import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.*
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.abrsoftware.movieapp.domain.DBMovieUserCase
@@ -12,7 +9,7 @@ import com.abrsoftware.movieapp.domain.dbmovie.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,10 +19,10 @@ class DBMovieViewModel @Inject constructor(
 ) : ViewModel() {
 
     val _account = MutableStateFlow(Account())
-    val account : StateFlow<Account> get()  = _account
+    val account = _account.asStateFlow()
 
     val _movieList = MutableStateFlow(emptyList<Movie>())
-    val movieList: StateFlow<List<Movie>> get() = _movieList
+    val movieList = _movieList.asStateFlow()
 
     var isLoading: Boolean by mutableStateOf(false)
     var errorMsj: String by mutableStateOf("")
